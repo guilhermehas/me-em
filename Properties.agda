@@ -1,11 +1,13 @@
+{-# OPTIONS --guardedness --sized-types #-}
 module Properties where
 
 open import Data.Nat
 open import Function
-open import Data.Product
-open import Data.List.Any hiding (any)
+open import Data.Product hiding (_<*>_)
+open import Data.List.Relation.Unary.Any hiding (any)
 open import Data.Vec as V
-open import Data.Stream as S
+open import Codata.Stream as S
+open import Data.Bool
 
 open import HDec
 open import Generators
@@ -23,6 +25,7 @@ instance
   IsSearchIsProp = is-prop (const ∘ toHDec)
   PropertyIsProp = is-prop id
 
+
 open IsProp ⦃ ... ⦄
 
 PropType : ∀{P} → ℕ → Property P → Set
@@ -36,9 +39,9 @@ exists : ∀ {X}{p : X → Set}{prop}
        → ⦃ P : IsProp prop ⦄
        → ((x : X) → prop (p x))
        → Property (∃ p)
-exists {p = p} ⦃ s ⦄ f d
+exists {X} {p = p} {prop} ⦃ s ⦄ ⦃ P ⦄ f d
    = let xs = V.toList $ S.take d s
-      in (| weaken (any xs (λ x → toProp (f x) d )) |)
+      in (| (weaken {xs}) (any xs λ x → toProp ⦃ P ⦄ (f x) d)|)
   where
     weaken : ∀{ls} → Any p ls → ∃ p
     weaken (here   x) = _ , x

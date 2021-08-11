@@ -1,10 +1,12 @@
+{-# OPTIONS --guardedness #-}
 module ModelChecker where
 
-open import Data.Product hiding (map)
+open import Data.Product hiding (map; _<*>_)
 open import Data.List hiding (all ; any)
-open import Data.List.All as All hiding (map; all)
-open import Data.List.Any as Any hiding (map; any)
-open import Coinduction
+open import Data.List.Relation.Unary.All as All hiding (map; all)
+open import Data.List.Relation.Unary.Any as Any hiding (map; any)
+-- open import Coinduction
+open import Codata.Musical.Notation
 open import Data.Nat
 open import Function
 open import Relation.Binary.PropositionalEquality
@@ -13,6 +15,7 @@ open import HDec
 
 
 record Diagram (L : Set)(Σ : Set) : Set₁ where
+  pattern
   no-eta-equality
   constructor td
   field  δ : L × Σ → List (L × Σ)

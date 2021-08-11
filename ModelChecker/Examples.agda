@@ -1,3 +1,4 @@
+{-# OPTIONS --guardedness --sized-types #-}
 module ModelChecker.Examples where
 
 open import Relation.Binary.PropositionalEquality hiding ([_])

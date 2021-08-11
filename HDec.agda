@@ -1,17 +1,19 @@
 module HDec where
 
-open import Data.Bool
+open import Data.Bool hiding (T?)
 open import Data.Unit
 open import Data.Empty
 open import Relation.Nullary
 open import Function
-open import Data.Sum
-open import Data.Product
+open import Data.Sum hiding (fromDec)
+open import Data.Product hiding (_<*>_)
 open import Category.Applicative using (RawApplicative)         public
 open import Category.Functor     using (RawFunctor)             public
 open import Category.Monad       using (RawMonad; RawMonadPlus) public
-open import Data.List.Any        hiding (any)
-open import Data.List.All        hiding (all)
+-- open import Data.List.Any        hiding (any)
+open import Data.List.Relation.Unary.Any hiding (any)
+-- open import Data.List.All        hiding (all)
+open import Data.List.Relation.Unary.All hiding (all)
 open import Data.List            hiding (any; all)
 
 record HDec (P : Set) : Set where
@@ -83,7 +85,10 @@ instance
 
 instance
   hdec-alternative : RawMonadPlus HDec
-  hdec-alternative = record { monadZero = record { monad = hdec-monad ; ∅ = empty } ; _∣_ = try }
+  hdec-alternative = record { monad = hdec-monad
+    ; alternative = record { applicativeZero = record { applicative = record { pure = λ z → hd false (λ _ → z)
+    ; _⊛_ = λ _ _ → hd false (λ ()) } ; ∅ = empty } ; _∣_ = try } }
+  -- record { monadZero = record { monad = hdec-monad ; ∅ = empty } ; _∣_ = try }
     where
       empty : ∀{P} → HDec P
       empty = hd false (λ ())

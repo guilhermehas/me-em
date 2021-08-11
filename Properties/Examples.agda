@@ -1,3 +1,4 @@
+{-# OPTIONS --guardedness --sized-types #-}
 module Properties.Examples where
 
 open import Generators
@@ -22,11 +23,11 @@ triad : Property _
 triad = exists $ λ { (x , y , z)
          → ¬? (x ≟ 0) and ¬? (y ≟ 0) and ¬? ((x ² + y ²) ≟ z ²) }
 
-gcd? : ∀ l m n → Dec (GCD l m n)
-gcd? l m n with gcd l m
-... | d , p with d ≟ n
-... | no q = no (λ p′ → q (GCD.unique p p′))
-... | yes r = yes (subst (GCD l m) r p)
+-- gcd? : ∀ l m n → Dec (GCD l m n)
+-- gcd? l m n with gcd-greatest l m
+-- ... | d , p with d ≟ n
+-- ... | no q = no (λ p′ → q (GCD.unique p p′))
+-- ... | yes r = yes (subst (GCD l m) r p)
 
 ex₃ : Property (∃ (λ i → ¬ GCD (i ² + 7) ((i + 1)² + 7) 1))
 ex₃ = exists $ λ i →

@@ -1,14 +1,15 @@
+{-# OPTIONS --guardedness --sized-types #-}
 module GCL.Examples where
 
 open import Data.Nat
-open import Data.Bool hiding (_≟_)
+open import Data.Bool hiding (_≟_; T?)
 open import Data.Product 
 open import Relation.Binary.PropositionalEquality
 open import Relation.Nullary
-open import Function
+open import Function hiding (_⟶_)
 open import Data.List hiding (and; or)
 
-import Data.Stream as S
+import Codata.Colist as S
 
 open import HDec
 open import Properties
@@ -85,7 +86,7 @@ SF : Formula
 SF =  AF ⟨ T inCS₁ ⟩ ∧′ AF ⟨ T inCS₂ ⟩
 
 termination? : MC Termination
-termination? = af (now (hd term? sound)) 
+termination? = af (now (hd term? sound))
   where
     term? : ⦃ ℓ : GCL × GCL ⦄ → Bool
     term? ⦃ a , b ⦄ = ⌊ skip? a ⌋ ∧ ⌊ skip? b ⌋
@@ -148,4 +149,3 @@ dekkers = ⟦ dekkers₁ ⟧ ∥ ⟦ dekkers₂ ⟧
 
 dekkers-check : HDec _
 dekkers-check = af (now (T? (inCS₁ ∧ inCS₂))) (model dekkers initialState) 100
-
