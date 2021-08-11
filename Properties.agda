@@ -1,4 +1,4 @@
-{-# OPTIONS --guardedness --sized-types #-}
+{-# OPTIONS --guardedness --sized-types --overlapping-instances #-}
 module Properties where
 
 open import Data.Nat
@@ -39,9 +39,9 @@ exists : ∀ {X}{p : X → Set}{prop}
        → ⦃ P : IsProp prop ⦄
        → ((x : X) → prop (p x))
        → Property (∃ p)
-exists {X} {p = p} {prop} ⦃ s ⦄ ⦃ P ⦄ f d
+exists {p = p} {prop} ⦃ s ⦄ f d
    = let xs = V.toList $ S.take d s
-      in (| (weaken {xs}) (any xs λ x → toProp ⦃ P ⦄ (f x) d)|)
+      in (| weaken (any xs λ x → toProp (f x) d)|)
   where
     weaken : ∀{ls} → Any p ls → ∃ p
     weaken (here   x) = _ , x
